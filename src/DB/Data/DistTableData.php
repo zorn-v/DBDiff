@@ -16,14 +16,9 @@ class DistTableData {
         $this->params = $params;
     }
 
-    public function getIterator($connection, $table) {
-        return new TableIterator($this->{$connection}, $table);
-    }
-
     public function getDataDiff($table, $key) {
-        $sourceIterator = $this->getIterator('source', $table);
-        $targetIterator = $this->getIterator('target', $table);
-        $differ = new ArrayDiff($key, $sourceIterator, $targetIterator, $this->params);
+        $sourceIterator = new TableIterator($this->source, $table);
+        $differ = new DistDiff($key, $sourceIterator, $this->target, $this->params);
         return $differ->getDiff($table);
     }
 
