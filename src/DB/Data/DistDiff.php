@@ -30,6 +30,7 @@ class DistDiff
             $keys = [];
             $data1 = $this->sourceIterator->next(self::SIZE);
             foreach ($data1 as $entry1) {
+                $entry1 = (array)$entry1;
                 $keyData = array_only($entry1, $this->key);
                 $sourceKeys[implode('-', $keyData)] = true;
                 foreach ($keyData as $k => $v) {
