@@ -11,10 +11,11 @@
     "require": {
         "aura/cli": "2.*@dev",
         "symfony/yaml": "^5.0",
-        "illuminate/database": "^9.0",
-        "illuminate/view": "^9.0",
-        "illuminate/container": "^9.0",
-        "diff/diff": "2.0.*@dev"
+        "illuminate/database": "^8.0",
+        "illuminate/view": "^8.0",
+        "illuminate/container": "^8.0",
+        "diff/diff": "2.0.*@dev",
+        "laravel/helpers": "^1.5"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.0"

@@ -34,14 +34,14 @@ class TableSchema {
     public function getSchema($connection, $table) {
         // collation & engine
         $status = $this->{$connection}->select("show table status like '$table'");
-        $engine = $status[0]['Engine'];
-        $collation = $status[0]['Collation'];
+        $engine = $status[0]->Engine;
+        $collation = $status[0]->Collation;
 
         $createDef = $this->{$connection}->select("SHOW CREATE TABLE `$table`")[0];
-        if (!isset($createDef['Create Table'])) {
+        if (!isset($createDef->{'Create Table'})) {
             return false;
         }
-        $schema = $createDef['Create Table'];
+        $schema = $createDef->{'Create Table'};
         $lines = array_map(function($el) { return trim($el);}, explode("\n", $schema));
         $lines = array_slice($lines, 1, -1);
 

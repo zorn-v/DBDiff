@@ -56,7 +56,6 @@ class LocalTableData {
         $keyNulls1 = implode(' AND ', $keyNull($key, 'a'));
         $keyNulls2 = implode(' AND ', $keyNull($key, 'b'));
 
-        $this->source->setFetchMode(\PDO::FETCH_NAMED);
         $result1 = $this->source->select(
            "SELECT $columnsAUtf FROM {$db1}.{$table} as a
             LEFT JOIN {$db2}.{$table} as b ON $keyCols WHERE $keyNulls2
@@ -65,15 +64,16 @@ class LocalTableData {
            "SELECT $columnsBUtf FROM {$db2}.{$table} as b
             LEFT JOIN {$db1}.{$table} as a ON $keyCols WHERE $keyNulls1
         ");
-        $this->source->setFetchMode(\PDO::FETCH_ASSOC);
 
         foreach ($result1 as $row) {
+            $row = (array)$row;
             $diffSequence[] = new InsertData($table, [
                 'keys' => array_only($row, $key),
                 'diff' => new \Diff\DiffOp\DiffOpAdd(array_except($row, '_connection'))
             ]);
         }
         foreach ($result2 as $row) {
+            $row = (array)$row;
             $diffSequence[] = new DeleteData($table, [
                 'keys' => array_only($row, $key),
                 'diff' => new \Diff\DiffOp\DiffOpRemove(array_except($row, '_connection'))
@@ -124,7 +124,6 @@ class LocalTableData {
             return "a.{$el} = b.{$el}";
         }, $key));
 
-        $this->source->setFetchMode(\PDO::FETCH_NAMED);
         $result = $this->source->select(
            "SELECT * FROM (
                 SELECT $columnsAas, $columnsBas, MD5(concat($columnsA)) AS hash1,
@@ -132,7 +131,6 @@ class LocalTableData {
                 INNER JOIN {$db2}.{$table} as b
                 ON $keyCols
             ) t WHERE hash1 <> hash2");
-        $this->source->setFetchMode(\PDO::FETCH_ASSOC);
 
         foreach ($result as $row) {
             $diff = []; $keys = [];
@@ -144,8 +142,8 @@ class LocalTableData {
 
                     if (in_array($theKey, $key)) $keys[$theKey] = $value;
 
-                    if (isset($row[$targetKey])) {
-                        $targetValue = $row[$targetKey];
+                    if (isset($row->$targetKey)) {
+                        $targetValue = $row->$targetKey;
                         if ($sourceValue != $targetValue) {
                             $diff[$theKey] = new \Diff\DiffOp\DiffOpChange($targetValue, $sourceValue);
                         }

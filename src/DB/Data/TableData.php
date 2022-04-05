@@ -29,6 +29,7 @@ class TableData {
         while ($iterator->hasNext()) {
             $data = $iterator->next(ArrayDiff::$size);
             foreach ($data as $entry) {
+                $entry = (array)$entry;
                 $diffSequence[] = new InsertData($table, [
                     'keys' => array_only($entry, $key),
                     'diff' => new \Diff\DiffOp\DiffOpAdd($entry)
@@ -46,6 +47,7 @@ class TableData {
         while ($iterator->hasNext()) {
             $data = $iterator->next(ArrayDiff::$size);
             foreach ($data as $entry) {
+                $entry = (array)$entry;
                 $diffSequence[] = new DeleteData($table, [
                     'keys' => array_only($entry, $key),
                     'diff' => new \Diff\DiffOp\DiffOpRemove($entry)

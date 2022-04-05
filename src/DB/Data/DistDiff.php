@@ -43,11 +43,13 @@ class DistDiff
             $data2 = $qb->get();
             // Find differences
             foreach ($data1 as $k1 => $entry1) {
+                $entry1 = (array)$entry1;
                 foreach ($data2 as $k2 => $entry2) {
+                    $entry2 = (array)$entry2;
                     if ($this->isKeyEqual($entry1, $entry2)) {
                         // unset the fields to ignore
-                        if (isset($params->fieldsToIgnore[$table])) {
-                            foreach ($params->fieldsToIgnore[$table] as $fieldToIgnore) {
+                        if (isset($this->params->fieldsToIgnore[$table])) {
+                            foreach ($this->params->fieldsToIgnore[$table] as $fieldToIgnore) {
                                 unset($entry1[$fieldToIgnore]);
                                 unset($entry2[$fieldToIgnore]);
                             }
@@ -69,6 +71,7 @@ class DistDiff
             }
             // Add new missing entries
             foreach ($data1 as $entry) {
+                $entry = (array)$entry;
                 $result[] = [
                     'keys' => array_only($entry, $this->key),
                     'diff' => new DiffOpAdd($entry)
@@ -80,6 +83,7 @@ class DistDiff
         while ($targetIterator->hasNext()) {
             $data = $targetIterator->next(self::SIZE);
             foreach ($data as $entry) {
+                $entry = (array)$entry;
                 $keyData = array_only($entry, $this->key);
                 $key = implode('-', $keyData);
                 if (isset($sourceKeys[$key])) {

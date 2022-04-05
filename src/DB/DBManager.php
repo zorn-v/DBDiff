@@ -59,8 +59,11 @@ class DBManager {
     }
 
     public function getTables($connection) {
-        $result = $this->getDB($connection)->select("show tables");
-        return array_flatten($result);
+        $dbName = $this->getDB($connection)->getDatabaseName();
+        $result = $this->getDB($connection)->getSchemaBuilder()->getAllTables();
+        return array_map(function ($table) use ($dbName) {
+            return $table->{'Tables_in_'.$dbName};
+        }, $result);
     }
 
     public function getColumns($connection, $table) {
@@ -72,8 +75,8 @@ class DBManager {
         $keys = $this->getDB($connection)->select("show indexes from `$table`");
         $ukey = [];
         foreach ($keys as $key) {
-            if ($key['Key_name'] === 'PRIMARY') {
-                $ukey[] = $key['Column_name'];
+            if ($key->Key_name === 'PRIMARY') {
+                $ukey[] = $key->Column_name;
             }
         }
         return $ukey;

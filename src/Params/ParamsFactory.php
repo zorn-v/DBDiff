@@ -4,9 +4,9 @@ use DBDiff\Exceptions\CLIException;
 
 
 class ParamsFactory {
-    
+
     public static function get() {
-        
+
         $params = new DefaultParams;
 
         $cli = new CLIGetter;
@@ -21,7 +21,7 @@ class ParamsFactory {
         $params = self::merge($params, $paramsFS);
 
         $params = self::merge($params, $paramsCLI);
-        
+
         if (empty($params->server1)) {
             throw new CLIException("A server is required");
         }
@@ -29,7 +29,7 @@ class ParamsFactory {
 
     }
 
-    protected function merge($obj1, $obj2) {
+    protected static function merge($obj1, $obj2) {
         return (object) array_merge((array) $obj1, (array) $obj2);
     }
 }
