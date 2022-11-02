@@ -1,19 +1,21 @@
-<?php namespace DBDiff\DB;
+<?php
+
+namespace DBDiff\DB;
 
 use DBDiff\DB\Schema\DBSchema;
 use DBDiff\DB\Schema\TableSchema;
 use DBDiff\DB\Data\DBData;
 use DBDiff\DB\Data\TableData;
 
-
-class DiffCalculator {
-
-    function __construct() {
-        $this->manager = new DBManager;
+class DiffCalculator
+{
+    public function __construct()
+    {
+        $this->manager = new DBManager();
     }
 
-    public function getDiff($params) {
-
+    public function getDiff($params)
+    {
         // Connect and test accessibility
         $this->manager->connect($params);
         $this->manager->testResources($params);
@@ -46,6 +48,5 @@ class DiffCalculator {
             'schema' => $schemaDiff,
             'data'   => $dataDiff,
         ];
-
     }
 }

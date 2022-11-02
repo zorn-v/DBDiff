@@ -42,7 +42,7 @@ class End2EndTest extends PHPUnit\Framework\TestCase
         ];
 
         ob_start();
-        $dbdiff = new DBDiff\DBDiff;
+        $dbdiff = new DBDiff\DBDiff();
         $dbdiff->run();
         ob_end_clean();
 
@@ -57,4 +57,3 @@ class End2EndTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($migration_actual_file, $migration_expected_file);
     }
 }
-?>

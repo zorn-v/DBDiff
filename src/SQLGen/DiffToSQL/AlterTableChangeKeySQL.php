@@ -1,15 +1,18 @@
-<?php namespace DBDiff\SQLGen\DiffToSQL;
+<?php
+
+namespace DBDiff\SQLGen\DiffToSQL;
 
 use DBDiff\SQLGen\SQLGenInterface;
 
-
-class AlterTableChangeKeySQL implements SQLGenInterface {
-
-    function __construct($obj) {
+class AlterTableChangeKeySQL implements SQLGenInterface
+{
+    public function __construct($obj)
+    {
         $this->obj = $obj;
     }
 
-    public function getUp() {
+    public function getUp()
+    {
         $table = $this->obj->table;
         $key = $this->obj->key;
         $schema = $this->obj->diff->getNewValue();
@@ -21,7 +24,8 @@ class AlterTableChangeKeySQL implements SQLGenInterface {
         return "ALTER TABLE `$table` DROP $key, ADD $schema;";
     }
 
-    public function getDown() {
+    public function getDown()
+    {
         $table = $this->obj->table;
         $key = $this->obj->key;
         $schema = $this->obj->diff->getOldValue();
@@ -32,5 +36,4 @@ class AlterTableChangeKeySQL implements SQLGenInterface {
         }
         return "ALTER TABLE `$table` DROP $key, ADD $schema;";
     }
-
 }

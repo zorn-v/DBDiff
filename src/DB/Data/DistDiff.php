@@ -1,4 +1,6 @@
-<?php namespace DBDiff\DB\Data;
+<?php
+
+namespace DBDiff\DB\Data;
 
 use DBDiff\Params\ParamsFactory;
 use Diff\Differ\MapDiffer;
@@ -8,14 +10,15 @@ use Illuminate\Database\MySqlConnection;
 
 class DistDiff
 {
-    const SIZE = 10000;
+    public const SIZE = 10000;
 
     private $key;
     private $sourceIterator;
     private $targetConnection;
     private $params;
 
-    public function __construct($key, TableIterator $sourceIterator, MySqlConnection $targetConnection, $params = null) {
+    public function __construct($key, TableIterator $sourceIterator, MySqlConnection $targetConnection, $params = null)
+    {
         $this->key = $key;
         $this->sourceIterator = $sourceIterator;
         $this->targetConnection = $targetConnection;
@@ -101,9 +104,12 @@ class DistDiff
         return $result;
     }
 
-    private function isKeyEqual($entry1, $entry2) {
+    private function isKeyEqual($entry1, $entry2)
+    {
         foreach ($this->key as $key) {
-            if ($entry1[$key] !== $entry2[$key]) return false;
+            if ($entry1[$key] !== $entry2[$key]) {
+                return false;
+            }
         }
         return true;
     }

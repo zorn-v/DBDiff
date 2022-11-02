@@ -1,9 +1,11 @@
-<?php namespace DBDiff\SQLGen;
+<?php
 
+namespace DBDiff\SQLGen;
 
-class MigrationGenerator {
-
-    public static function generate($diffs, $method) {
+class MigrationGenerator
+{
+    public static function generate($diffs, $method)
+    {
         $sql = "";
         foreach ($diffs as $diff) {
             $reflection = new \ReflectionClass($diff);
@@ -13,5 +15,4 @@ class MigrationGenerator {
         }
         return $sql;
     }
-
 }

@@ -1,8 +1,9 @@
-<?php namespace DBDiff\SQLGen;
+<?php
 
+namespace DBDiff\SQLGen;
 
-class DiffSorter {
-
+class DiffSorter
+{
     private $up_order = [
         "SetDBCharset",
         "SetDBCollation",
@@ -59,20 +60,24 @@ class DiffSorter {
         "InsertData",
     ];
 
-    public function sort($diff, $type) {
+    public function sort($diff, $type)
+    {
         usort($diff, [$this, 'compare'.ucfirst($type)]);
         return $diff;
     }
 
-    private function compareUp($a, $b) {
+    private function compareUp($a, $b)
+    {
         return $this->compare($this->up_order, $a, $b);
     }
 
-    private function compareDown($a, $b) {
+    private function compareDown($a, $b)
+    {
         return $this->compare($this->down_order, $a, $b);
     }
 
-    private function compare($order, $a, $b) {
+    private function compare($order, $a, $b)
+    {
         $order = array_flip($order);
         $reflectionA = new \ReflectionClass($a);
         $reflectionB = new \ReflectionClass($b);
@@ -81,8 +86,11 @@ class DiffSorter {
         $indexA = $order[$sqlGenClassA];
         $indexB = $order[$sqlGenClassB];
 
-        if ($indexA === $indexB) return 0;
-        else if ($indexA > $indexB) return 1;
+        if ($indexA === $indexB) {
+            return 0;
+        } elseif ($indexA > $indexB) {
+            return 1;
+        }
         return -1;
     }
 }

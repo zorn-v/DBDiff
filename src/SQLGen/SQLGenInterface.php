@@ -1,7 +1,9 @@
-<?php namespace DBDiff\SQLGen;
+<?php
 
+namespace DBDiff\SQLGen;
 
-interface SQLGenInterface {
+interface SQLGenInterface
+{
     public function getUp();
     public function getDown();
 }

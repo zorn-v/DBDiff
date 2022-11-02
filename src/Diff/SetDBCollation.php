@@ -1,9 +1,11 @@
-<?php namespace DBDiff\Diff;
+<?php
 
+namespace DBDiff\Diff;
 
-class SetDBCollation {
-
-    function __construct($db, $collation, $prevCollation) {
+class SetDBCollation
+{
+    public function __construct($db, $collation, $prevCollation)
+    {
         $this->db = $db;
         $this->collation = $collation;
         $this->prevCollation = $prevCollation;

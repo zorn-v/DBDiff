@@ -1,19 +1,22 @@
-<?php namespace DBDiff\DB\Data;
+<?php
+
+namespace DBDiff\DB\Data;
 
 use DBDiff\Params\ParamsFactory;
 use DBDiff\Diff\SetDBCollation;
 use DBDiff\Exceptions\DataException;
 use DBDiff\Logger;
 
-
-class DBData {
-
-    function __construct($manager, $params = null) {
+class DBData
+{
+    public function __construct($manager, $params = null)
+    {
         $this->manager = $manager;
         $this->params = $params;
     }
 
-    function getDiff() {
+    public function getDiff()
+    {
         if ($this->params) {
             $params = $this->params;
         } else {
@@ -57,5 +60,4 @@ class DBData {
 
         return $diffSequence;
     }
-
 }

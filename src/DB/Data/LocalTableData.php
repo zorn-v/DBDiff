@@ -1,4 +1,6 @@
-<?php namespace DBDiff\DB\Data;
+<?php
+
+namespace DBDiff\DB\Data;
 
 use DBDiff\Params\ParamsFactory;
 use DBDiff\Diff\InsertData;
@@ -7,17 +9,18 @@ use DBDiff\Diff\DeleteData;
 use DBDiff\Exceptions\DataException;
 use DBDiff\Logger;
 
-
-class LocalTableData {
-
-    function __construct($manager, $params = null) {
+class LocalTableData
+{
+    public function __construct($manager, $params = null)
+    {
         $this->manager = $manager;
         $this->source = $this->manager->getDB('source');
         $this->target = $this->manager->getDB('target');
         $this->params = $params;
     }
 
-    public function getDiff($table, $key) {
+    public function getDiff($table, $key)
+    {
         Logger::info("Now calculating data diff for table `$table`");
         $diffSequence1 = $this->getOldNewDiff($table, $key);
         $diffSequence2 = $this->getChangeDiff($table, $key);
@@ -26,7 +29,8 @@ class LocalTableData {
         return $diffSequence;
     }
 
-    public function getOldNewDiff($table, $key) {
+    public function getOldNewDiff($table, $key)
+    {
         $diffSequence = [];
 
         $db1 = $this->source->getDatabaseName();
@@ -35,8 +39,8 @@ class LocalTableData {
         $columns1 = $this->manager->getColumns('source', $table);
         $columns2 = $this->manager->getColumns('target', $table);
 
-        $wrapConvert = function($arr, $p) {
-            return array_map(function($el) use ($p) {
+        $wrapConvert = function ($arr, $p) {
+            return array_map(function ($el) use ($p) {
                 return "CONVERT(`{$p}`.`{$el}` USING utf8) as `{$el}`";
             }, $arr);
         };
@@ -44,12 +48,12 @@ class LocalTableData {
         $columnsAUtf = implode(',', $wrapConvert($columns1, 'a'));
         $columnsBUtf = implode(',', $wrapConvert($columns2, 'b'));
 
-        $keyCols = implode(' AND ', array_map(function($el) {
+        $keyCols = implode(' AND ', array_map(function ($el) {
             return "`a`.`{$el}` = `b`.`{$el}`";
         }, $key));
 
-        $keyNull = function($arr, $p) {
-            return array_map(function($el) use ($p) {
+        $keyNull = function ($arr, $p) {
+            return array_map(function ($el) use ($p) {
                 return "`{$p}`.`{$el}` IS NULL";
             }, $arr);
         };
@@ -57,13 +61,15 @@ class LocalTableData {
         $keyNulls2 = implode(' AND ', $keyNull($key, 'b'));
 
         $result1 = $this->source->select(
-           "SELECT $columnsAUtf FROM {$db1}.{$table} as a
+            "SELECT $columnsAUtf FROM {$db1}.{$table} as a
             LEFT JOIN {$db2}.{$table} as b ON $keyCols WHERE $keyNulls2
-        ");
+        "
+        );
         $result2 = $this->source->select(
-           "SELECT $columnsBUtf FROM {$db2}.{$table} as b
+            "SELECT $columnsBUtf FROM {$db2}.{$table} as b
             LEFT JOIN {$db1}.{$table} as a ON $keyCols WHERE $keyNulls1
-        ");
+        "
+        );
 
         foreach ($result1 as $row) {
             $row = (array)$row;
@@ -83,7 +89,8 @@ class LocalTableData {
         return $diffSequence;
     }
 
-    public function getChangeDiff($table, $key) {
+    public function getChangeDiff($table, $key)
+    {
         if ($this->params) {
             $params = $this->params;
         } else {
@@ -103,14 +110,14 @@ class LocalTableData {
             $columns2 = array_diff($columns2, $params->fieldsToIgnore[$table]);
         }
 
-        $wrapAs = function($arr, $p1, $p2) {
-            return array_map(function($el) use ($p1, $p2) {
+        $wrapAs = function ($arr, $p1, $p2) {
+            return array_map(function ($el) use ($p1, $p2) {
                 return "`{$p1}`.`{$el}` as `{$p2}{$el}`";
             }, $arr);
         };
 
-        $wrapCast = function($arr, $p) {
-            return array_map(function($el) use ($p) {
+        $wrapCast = function ($arr, $p) {
+            return array_map(function ($el) use ($p) {
                 return "CAST(`{$p}`.`{$el}` AS CHAR CHARACTER SET utf8)";
             }, $arr);
         };
@@ -120,27 +127,31 @@ class LocalTableData {
         $columnsBas = implode(',', $wrapAs($columns2, 'b', 't_'));
         $columnsB   = implode(',', $wrapCast($columns2, 'b'));
 
-        $keyCols = implode(' AND ', array_map(function($el) {
+        $keyCols = implode(' AND ', array_map(function ($el) {
             return "a.{$el} = b.{$el}";
         }, $key));
 
         $result = $this->source->select(
-           "SELECT * FROM (
+            "SELECT * FROM (
                 SELECT $columnsAas, $columnsBas, MD5(concat($columnsA)) AS hash1,
                 MD5(concat($columnsB)) AS hash2 FROM {$db1}.{$table} as a
                 INNER JOIN {$db2}.{$table} as b
                 ON $keyCols
-            ) t WHERE hash1 <> hash2");
+            ) t WHERE hash1 <> hash2"
+        );
 
         foreach ($result as $row) {
-            $diff = []; $keys = [];
+            $diff = [];
+            $keys = [];
             foreach ($row as $k => $value) {
                 if (starts_with($k, 's_')) {
                     $theKey = substr($k, 2);
                     $targetKey = 't_'.$theKey;
                     $sourceValue = $value;
 
-                    if (in_array($theKey, $key)) $keys[$theKey] = $value;
+                    if (in_array($theKey, $key)) {
+                        $keys[$theKey] = $value;
+                    }
 
                     if (isset($row->$targetKey)) {
                         $targetValue = $row->$targetKey;
@@ -148,7 +159,7 @@ class LocalTableData {
                             $diff[$theKey] = new \Diff\DiffOp\DiffOpChange($targetValue, $sourceValue);
                         }
                     } else {
-                        $diff[$theKey] = new \Diff\DiffOp\DiffOpChange(NULL, $sourceValue);
+                        $diff[$theKey] = new \Diff\DiffOp\DiffOpChange(null, $sourceValue);
                     }
                 }
             }
@@ -160,5 +171,4 @@ class LocalTableData {
 
         return $diffSequence;
     }
-
 }

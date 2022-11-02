@@ -1,9 +1,11 @@
-<?php namespace DBDiff\Diff;
+<?php
 
+namespace DBDiff\Diff;
 
-class AlterTableChangeKey {
-
-    function __construct($table, $key, $diff) {
+class AlterTableChangeKey
+{
+    public function __construct($table, $key, $diff)
+    {
         $this->table = $table;
         $this->key = $key;
         $this->diff = $diff;

@@ -1,4 +1,6 @@
-<?php namespace DBDiff\DB\Data;
+<?php
+
+namespace DBDiff\DB\Data;
 
 use DBDiff\Diff\InsertData;
 use DBDiff\Diff\UpdateData;
@@ -6,10 +8,10 @@ use DBDiff\Diff\DeleteData;
 use DBDiff\Exceptions\DataException;
 use DBDiff\Logger;
 
-
-class TableData {
-
-    function __construct($manager, $params = null) {
+class TableData
+{
+    public function __construct($manager, $params = null)
+    {
         $this->manager = $manager;
         $this->source = $this->manager->getDB('source');
         $this->target = $this->manager->getDB('target');
@@ -17,11 +19,13 @@ class TableData {
         $this->localTableData = new LocalTableData($manager, $params);
     }
 
-    public function getIterator($connection, $table) {
+    public function getIterator($connection, $table)
+    {
         return new TableIterator($this->{$connection}, $table);
     }
 
-    public function getNewData($table) {
+    public function getNewData($table)
+    {
         Logger::info("Now getting new data from table `$table`");
         $diffSequence = [];
         $iterator = $this->getIterator('source', $table);
@@ -39,7 +43,8 @@ class TableData {
         return $diffSequence;
     }
 
-    public function getOldData($table) {
+    public function getOldData($table)
+    {
         Logger::info("Now getting old data from table `$table`");
         $diffSequence = [];
         $iterator = $this->getIterator('target', $table);
@@ -57,7 +62,8 @@ class TableData {
         return $diffSequence;
     }
 
-    public function getDiff($table) {
+    public function getDiff($table)
+    {
         $server1 = $this->source->getConfig('host').':'.$this->source->getConfig('port');
         $server2 = $this->target->getConfig('host').':'.$this->target->getConfig('port');
         $sourceKey  = $this->manager->getKey('source', $table);
@@ -71,7 +77,8 @@ class TableData {
         }
     }
 
-    private function checkKeys($table, $sourceKey, $targetKey) {
+    private function checkKeys($table, $sourceKey, $targetKey)
+    {
         if (empty($sourceKey) || empty($targetKey)) {
             throw new DataException("No primary key found in table `$table`");
         }
@@ -80,5 +87,4 @@ class TableData {
         }
         return true;
     }
-
 }

@@ -1,17 +1,20 @@
-<?php namespace DBDiff\Params;
+<?php
+
+namespace DBDiff\Params;
 
 use DBDiff\Exceptions\FSException;
 use Symfony\Component\Yaml\Yaml;
 
-
-class FSGetter implements ParamsGetter {
-
-    function __construct($params) {
+class FSGetter implements ParamsGetter
+{
+    public function __construct($params)
+    {
         $this->params = $params;
     }
 
-    public function getParams() {
-        $params = new \StdClass;
+    public function getParams()
+    {
+        $params = new \StdClass();
         $configFile = $this->getFile();
 
         if ($configFile) {
@@ -24,11 +27,12 @@ class FSGetter implements ParamsGetter {
                 throw new FSException("Error parsing config file");
             }
         }
-        
+
         return $params;
     }
 
-    protected function getFile() {
+    protected function getFile()
+    {
         $configFile = false;
 
         if (isset($this->params->config)) {
@@ -45,7 +49,8 @@ class FSGetter implements ParamsGetter {
         return $configFile;
     }
 
-    protected function setIn($obj, $key, $value) {
+    protected function setIn($obj, $key, $value)
+    {
         if (strpos($key, '-') !== false) {
             $parts = explode('-', $key);
             $array = &$obj->$parts[0];
@@ -54,5 +59,4 @@ class FSGetter implements ParamsGetter {
             $obj->$key = $value;
         }
     }
-
 }

@@ -1,4 +1,6 @@
-<?php namespace DBDiff\DB\Schema;
+<?php
+
+namespace DBDiff\DB\Schema;
 
 use Diff\Differ\ListDiffer;
 
@@ -9,16 +11,16 @@ use DBDiff\Diff\DropTable;
 use DBDiff\Diff\AddTable;
 use DBDiff\Diff\AlterTable;
 
-
-
-class DBSchema {
-
-    function __construct($manager, $params = null) {
+class DBSchema
+{
+    public function __construct($manager, $params = null)
+    {
         $this->manager = $manager;
         $this->params = $params;
     }
 
-    function getDiff() {
+    public function getDiff()
+    {
         if ($this->params) {
             $params = $this->params;
         } else {
@@ -72,9 +74,9 @@ class DBSchema {
         return $diffs;
     }
 
-    protected function getDBVariable($connection, $var) {
+    protected function getDBVariable($connection, $var)
+    {
         $result = $this->manager->getDB($connection)->select("show variables like '$var'");
         return $result[0]->Value;
     }
-
 }

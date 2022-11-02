@@ -6,4 +6,4 @@ migration.sql
 Thumbs.db
 dist
 composer.lock
-.phpunit.result.cache
+*.cache
