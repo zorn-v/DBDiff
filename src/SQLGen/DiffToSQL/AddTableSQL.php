@@ -13,7 +13,8 @@ class AddTableSQL implements SQLGenInterface {
         $table = $this->obj->table;
         $connection = $this->obj->connection;
         $res = $connection->select("SHOW CREATE TABLE `$table`");
-        return $res[0]->{'Create Table'} ?? '';
+        $sql = $res[0]->{'Create Table'} ?? '';
+        return $sql ? $sql.';' : '';
     }
 
     public function getDown() {
