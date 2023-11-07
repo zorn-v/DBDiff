@@ -9,6 +9,8 @@ use DBDiff\DB\Data\TableData;
 
 class DiffCalculator
 {
+    public $manager;
+
     public function __construct()
     {
         $this->manager = new DBManager();

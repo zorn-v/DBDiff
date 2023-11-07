@@ -7,6 +7,10 @@ use Illuminate\Filesystem\Filesystem;
 
 class Templater
 {
+    public $params;
+    public $up;
+    public $down;
+
     public function __construct($params, $up, $down)
     {
         $this->params = $params;

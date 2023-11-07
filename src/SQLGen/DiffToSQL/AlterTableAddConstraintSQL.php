@@ -6,6 +6,8 @@ use DBDiff\SQLGen\SQLGenInterface;
 
 class AlterTableAddConstraintSQL implements SQLGenInterface
 {
+    public $obj;
+
     public function __construct($obj)
     {
         $this->obj = $obj;

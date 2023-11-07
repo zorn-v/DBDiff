@@ -7,6 +7,8 @@ use Symfony\Component\Yaml\Yaml;
 
 class FSGetter implements ParamsGetter
 {
+    public $params;
+
     public function __construct($params)
     {
         $this->params = $params;

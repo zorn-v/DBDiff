@@ -11,6 +11,14 @@ class ArrayDiff
 {
     public static $size = 1000;
 
+    public $key;
+    public $dbiterator1;
+    public $dbiterator2;
+    public $sourceBucket;
+    public $targetBucket;
+    public $diffBucket;
+    public $params;
+
     public function __construct($key, $dbiterator1, $dbiterator2, $params = null)
     {
         $this->key = $key;

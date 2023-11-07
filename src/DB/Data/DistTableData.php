@@ -10,6 +10,11 @@ use DBDiff\Logger;
 
 class DistTableData
 {
+    public $manager;
+    public $source;
+    public $target;
+    public $params;
+
     public function __construct($manager, $params = null)
     {
         $this->manager = $manager;

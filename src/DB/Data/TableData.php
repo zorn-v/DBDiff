@@ -10,6 +10,12 @@ use DBDiff\Logger;
 
 class TableData
 {
+    public $manager;
+    public $source;
+    public $target;
+    public $distTableData;
+    public $localTableData;
+
     public function __construct($manager, $params = null)
     {
         $this->manager = $manager;

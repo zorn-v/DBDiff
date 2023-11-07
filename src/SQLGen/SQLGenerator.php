@@ -8,6 +8,9 @@ use DBDiff\Logger;
 
 class SQLGenerator implements SQLGenInterface
 {
+    public $diffSorter;
+    public $diff;
+
     public function __construct($diff)
     {
         $this->diffSorter = new DiffSorter();

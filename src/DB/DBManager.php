@@ -7,6 +7,8 @@ use DBDiff\Exceptions\DBException;
 
 class DBManager
 {
+    public $capsule;
+
     public function __construct()
     {
         $this->capsule = new Capsule();
