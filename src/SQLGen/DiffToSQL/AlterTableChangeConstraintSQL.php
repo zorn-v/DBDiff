@@ -18,7 +18,7 @@ class AlterTableChangeConstraintSQL implements SQLGenInterface
         $table = $this->obj->table;
         $name = $this->obj->name;
         $schema = $this->obj->diff->getNewValue();
-        return "ALTER TABLE `$table` DROP CONSTRAINT `$key`;\nALTER TABLE `$table` ADD $schema;";
+        return "ALTER TABLE `$table` DROP CONSTRAINT `$name`;\nALTER TABLE `$table` ADD $schema;";
     }
 
     public function getDown()
@@ -26,6 +26,6 @@ class AlterTableChangeConstraintSQL implements SQLGenInterface
         $table = $this->obj->table;
         $name = $this->obj->name;
         $schema = $this->obj->diff->getOldValue();
-        return "ALTER TABLE `$table` DROP CONSTRAINT `$key`;\nALTER TABLE `$table` ADD $schema;";
+        return "ALTER TABLE `$table` DROP CONSTRAINT `$name`;\nALTER TABLE `$table` ADD $schema;";
     }
 }
